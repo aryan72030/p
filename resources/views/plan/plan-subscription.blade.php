@@ -26,7 +26,7 @@
             <div class="text-center mb-4">
                 <ul class="nav nav-pills justify-content-center" id="plan-duration-tabs">
                     <li class="nav-item">
-                        <a class="nav-link {{ $duration == 'Monthly' ? 'active' : '' }}" href="?duration=monthly">{{ __('Monthly') }}</a>
+                        <a class="nav-link {{ $duration == 'Monthly' ? 'active' : '' }}" href="?duration=Monthly">{{ __('Monthly') }}</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link {{ $duration == 'Quartely' ? 'active' : '' }}" href="?duration=Quartely">{{ __('Quarterly') }}</a>
@@ -35,7 +35,7 @@
                         <a class="nav-link {{ $duration == 'Half_year' ? 'active' : '' }}" href="?duration=Half_year">{{ __('Half Yearly') }}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {{ $duration == 'Yearly' ? 'active' : '' }}" href="?duration=yearly">{{ __('Yearly') }}</a>
+                        <a class="nav-link {{ $duration == 'Yearly' ? 'active' : '' }}" href="?duration=Yearly">{{ __('Yearly') }}</a>
                     </li>
                 </ul>
             </div>

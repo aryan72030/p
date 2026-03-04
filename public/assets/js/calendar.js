@@ -56,10 +56,12 @@
                 center: 'title',
                 right: 'dayGridMonth,timeGridWeek,timeGridDay'
             },
+            // initialView: 'dayGridMonth',
             themeSystem: 'bootstrap',
-            slotDuration: '00:10:00',
+            slotMinTime: '06:00:00',
+            slotMaxTime: '22:00:00',
+            slotDuration: '00:30:00',
             navLinks: true,
-            droppable: true,
             selectable: true,
             selectMirror: true,
             editable: false,
@@ -68,9 +70,13 @@
             events: appointmentsData || [],
             eventClick: function(info) {
                 document.getElementById('appointmentModalLabel').textContent = info.event.title;
+                var customerRow = '';
+                if (typeof isAdmin !== 'undefined' && isAdmin) {
+                    customerRow = '<p><strong>Customer:</strong> ' + info.event.extendedProps.customer + '</p>';
+                }
                 document.getElementById('appointmentDetails').innerHTML = 
                     '<p><strong>Staff:</strong> ' + info.event.extendedProps.staff + '</p>' +
-                    '<p><strong>Customer:</strong> ' + info.event.extendedProps.customer + '</p>' +
+                    customerRow +
                     '<p><strong>Status:</strong> <span class="badge bg-' + 
                     (info.event.extendedProps.status == 'Confirmed' ? 'success' : (info.event.extendedProps.status == 'Pending' ? 'warning' : 'secondary')) + 
                     '">' + info.event.extendedProps.status + '</span></p>' +

@@ -32,33 +32,59 @@ class UserPlanController extends Controller
             $this->create_subcription($plan, null, 'Free', 'Free');
             return redirect()->route('subscription.index')->with('success', 'Free plan subscribed successfully');
         }
-        stripe_config();
-        $stripeKey = config('services.stripe.key');
-
-        return view('plan.payment', compact('plan', 'stripeKey'));
-    }
-
-    public function payment(Request $request, $id)
-    {
-        $plan = Plan::findOrFail($id);
-        // $user = Auth::user();
 
         stripe_config();
+        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+
         try {
-            \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
-
-            $charge = \Stripe\Charge::create([
-                'amount' => $plan->amount * 100,
-                'currency' =>  'usd',
-                'source' => $request->stripeToken,
-                'description' => 'Plan Subscription: ' . $plan->title,
+            $session = \Stripe\Checkout\Session::create([
+                'payment_method_types' => ['card'],
+                'line_items' => [[
+                    'price_data' => [
+                        'currency' => 'usd',
+                        'product_data' => [
+                            'name' => $plan->title,
+                            'description' => $plan->description,
+                        ],
+                        'unit_amount' => $plan->amount * 100,
+                    ],
+                    'quantity' => 1,
+                ]],
+                'mode' => 'payment',
+                'success_url' => route('payment.success') . '?session_id={CHECKOUT_SESSION_ID}&plan_id=' . $plan->id,
+                'cancel_url' => route('subscription.index'),
             ]);
 
-            $this->create_subcription($plan, $charge->id, 'stripe', $charge->receipt_url);
-
-            return redirect()->route('subscription.index')->with('success', 'Plan subscribed successfully');
+            return redirect($session->url);
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Payment failed: ' . $e->getMessage());
+        }
+    }
+
+    public function paymentSuccess(Request $request)
+    {
+        $sessionId = $request->get('session_id');
+        $planId = $request->get('plan_id');
+
+        if (!$sessionId || !$planId) {
+            return redirect()->route('subscription.index')->with('error', 'Invalid payment session');
+        }
+
+        stripe_config();
+        \Stripe\Stripe::setApiKey(config('services.stripe.secret'));
+
+        try {
+            $session = \Stripe\Checkout\Session::retrieve($sessionId);
+            
+            if ($session->payment_status === 'paid') {
+                $plan = Plan::findOrFail($planId);
+                $this->create_subcription($plan, $session->payment_intent, 'stripe', $session->id);
+                return redirect()->route('subscription.index')->with('success', 'Plan subscribed successfully');
+            }
+
+            return redirect()->route('subscription.index')->with('error', 'Payment not completed');
+        } catch (\Exception $e) {
+            return redirect()->route('subscription.index')->with('error', 'Payment verification failed: ' . $e->getMessage());
         }
     }
 

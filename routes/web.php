@@ -48,7 +48,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('plan', PlanController::class);
     Route::get('/plan-subscription', [UserPlanController::class, 'index'])->name('subscription.index');
     Route::post('/subscription/create/{id}', [UserPlanController::class, 'subscribe'])->name('subscribe.create');
-    Route::post('/payment/{id}', [UserPlanController::class, 'payment'])->name('plan.payment');
+    Route::get('/payment/success', [UserPlanController::class, 'paymentSuccess'])->name('payment.success');
 
     Route::resource('history', HistoryController::class);
 });

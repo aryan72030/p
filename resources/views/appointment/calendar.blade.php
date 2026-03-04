@@ -118,10 +118,12 @@
     <script src="{{ asset('assets/js/plugins/apexcharts.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/main.min.js') }}"></script>
     <script>
+        var isAdmin = {{ auth()->user()->hasRole('admin') ? 'true' : 'false' }};
         var appointmentsData = {!! json_encode($appointments->map(function($appointment) {
             return [
-                'title' => $appointment->service . ' - ' . ($appointment->users->name ?? 'N/A'),
+                'title' => $appointment->service . (auth()->user()->hasRole('admin') ? ' - ' . ($appointment->users->name ?? 'N/A') : ''),
                 'start' => $appointment->appointment_date . 'T' . $appointment->start_time,
+                // 'allDay' => false,
                 'className' => $appointment->status == 'Confirmed' ? 'event-success' : ($appointment->status == 'Pending' ? 'event-warning' : 'event-danger'),
                 'extendedProps' => [
                     'staff' => $appointment->staff->name ?? 'N/A',
