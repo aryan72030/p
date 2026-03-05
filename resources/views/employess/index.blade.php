@@ -54,7 +54,7 @@
                                             <tr>
                                                 <td>{{ $user->name }}</td>
                                                 <td>{{ $user->email }}</td>
-                                                <td>{{ $user->role }}</td>
+                                                <td>{{ \App\Models\Role::find($user->role)?->name }}</td>
 
                                                 {{-- <td><img style="width:  ;" src=""></td> --}}
                                                 <td style="display: flex">

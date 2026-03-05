@@ -63,7 +63,7 @@
 
 </form>
 
-
+@push('js_required')
 <script>
     $(document).on('shown.bs.modal', '#commonModal', function() {
         const modal = $(this);
@@ -122,3 +122,4 @@
         if (dateInput) loadStaffByDate(dateInput);
     });
 </script>
+@endpush

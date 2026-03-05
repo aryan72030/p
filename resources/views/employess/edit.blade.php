@@ -66,10 +66,10 @@
                                     <div class="col-lg-6">
                                         <select class="form-control" name="role" id="select">
                                             <option>select Roles</option>
-                                            @foreach ($role as $role)
+                                            @foreach ($role as $id => $name)
                                                 <option
-                                                    value="{{ $role->name }}"{{ $update->role == $role->name ? 'selected' : '' }}>
-                                                    {{ $role->name }}</option>
+                                                    value="{{ $id }}"{{ $update->role == $id ? 'selected' : '' }}>
+                                                    {{ $name }}</option>
                                             @endforeach
                                         </select>
                                         @error('role')

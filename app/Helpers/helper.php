@@ -56,16 +56,36 @@ function checkEmployee()
 {
     $user = Auth::user();
 
+    if (!$user->plan_id || !$user->plan) {
+        return ['status' => false, 'message' => 'You do not have an active plan. Please subscribe to a plan.'];
+    }
+
+    if ($user->plan_expiry_date && $user->plan_expiry_date < now()) {
+        return ['status' => false, 'message' => 'Your plan has expired. Please renew your subscription.'];
+    }
+
     $employeeCount = User::where('create_id', $user->id)->count();
-    return $employeeCount < $user->plan->max_employees;
+    $canAdd = $employeeCount < $user->plan->max_employees;
+    
+    return ['status' => $canAdd, 'message' => $canAdd ? '' : 'You have reached your employee limit. Please upgrade your plan.'];
 }
 
 function CheckService()
 {
     $user = Auth::user();
 
+    if (!$user->plan_id || !$user->plan) {
+        return ['status' => false, 'message' => 'You do not have an active plan. Please subscribe to a plan.'];
+    }
+
+    if ($user->plan_expiry_date && $user->plan_expiry_date < now()) {
+        return ['status' => false, 'message' => 'Your plan has expired. Please renew your subscription.'];
+    }
+
     $serviceCount = Service::where('create_id', createid())->count();
-    return $serviceCount < $user->plan->max_service;
+    $canAdd = $serviceCount < $user->plan->max_service;
+    
+    return ['status' => $canAdd, 'message' => $canAdd ? '' : 'You have reached your service limit. Please upgrade your plan.'];
 }
 
 

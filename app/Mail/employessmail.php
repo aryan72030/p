@@ -32,7 +32,7 @@ class employessmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'hello users',
+            subject: 'Welcome to ' . config('app.name') . ' - Your Account Details',
         );
     }
 
@@ -42,7 +42,7 @@ class employessmail extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'template.mail',
+            view: 'template.mail',
         );
     }
 

@@ -71,6 +71,7 @@
 
 </form>
 
+@push('js_required')
 <script>
     const staff = @json($staff);
 
@@ -118,3 +119,4 @@
         }
     });
 </script>
+@endpush

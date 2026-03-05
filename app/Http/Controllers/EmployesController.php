@@ -42,7 +42,7 @@ class EmployesController extends Controller
             return redirect()->route('subscription.index')->with('error', 'You have reached your employee limit. Please upgrade your plan.');
         }
 
-        $role = Role::get();
+        $role = Role::where('name', '!=', 'admin')->pluck('name', 'id');
         return view('employess.create', compact('role'));
     }
 
@@ -100,7 +100,7 @@ class EmployesController extends Controller
         if (!Auth::user()->isAbleTo('edit-employees')) {
             abort(403, 'Unauthorized');
         }
-        $role = Role::get();
+        $role = Role::where('name', '!=', 'admin')->pluck('name', 'id');
         $update = User::findOrFail($id);
         return view('employess.edit', compact('update', 'role'));
     }
