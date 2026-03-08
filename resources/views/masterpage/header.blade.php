@@ -257,16 +257,22 @@
                         <a class="dash-head-link dropdown-toggle arrow-none me-0" data-bs-toggle="dropdown"
                             href="#" role="button" aria-haspopup="false" aria-expanded="false">
                             <i class="ti ti-world nocolor"></i>
-                            <span class="drp-text hide-mob">EN</span>
+                            <span class="drp-text hide-mob">{{ strtoupper(app()->getLocale()) }}</span>
                             <i class="ti ti-chevron-down drp-arrow nocolor"></i>
                         </a>
                         <div class="dropdown-menu dash-h-dropdown dropdown-menu-end">
-                            <a href="#!" class="dropdown-item">
-                                <span>{{__('English')}}</span>
-                            </a>
-                            <a href="#!" class="dropdown-item">
-                                <span>{{__('Deutsch')}}</span>
-                            </a>
+                            @php
+                                $languages = \App\Models\Language::all();
+                            @endphp
+                            @if($languages->count() > 0)
+                                @foreach($languages as $lang)
+                                    <a href="{{ route('language.change', $lang->language_code) }}" class="dropdown-item">
+                                        <span>{{ $lang->language_name }} ({{ $lang->language_code }})</span>
+                                    </a>
+                                @endforeach
+                            @else
+                                <a href="#" class="dropdown-item">No languages available</a>
+                            @endif
                         </div>
                     </li>
                 </ul>

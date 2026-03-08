@@ -7,7 +7,8 @@
         <div class="col-lg-6">
             <select class="form-control" name="customer_id" required>
                 <option value="">Select Customer</option>
-                @foreach ($customers as $customer)
+                @foreach ($
+                 as $customer)
                     <option value="{{ $customer->id }}">{{ $customer->name }}</option>
                 @endforeach
             </select>
@@ -74,6 +75,7 @@
 @push('js_required')
 <script>
     const staff = @json($staff);
+    
 
     document.getElementById('appointment_date').addEventListener('change', function() {
 

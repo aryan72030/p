@@ -5,6 +5,8 @@ use App\Http\Controllers\BlogController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployesController;
 use App\Http\Controllers\HistoryController;
+use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\LanguageTranslationController;
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
@@ -21,6 +23,10 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/test-language', function () {
+    return view('test-language');
+})->middleware('auth');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -51,6 +57,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/payment/success', [UserPlanController::class, 'paymentSuccess'])->name('payment.success');
 
     Route::resource('history', HistoryController::class);
+    Route::get('language/change/{code}', [LanguageController::class, 'change'])->name('language.change');
+    Route::resource('language', LanguageController::class);
+    Route::get('language-translation', [LanguageTranslationController::class, 'index'])->name('language-translation.index');
+    Route::get('language-translation/{code}/edit', [LanguageTranslationController::class, 'edit'])->name('language-translation.edit');
+    Route::put('language-translation/{code}', [LanguageTranslationController::class, 'update'])->name('language-translation.update');
 });
 
 require __DIR__ . '/auth.php';

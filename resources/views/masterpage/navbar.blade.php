@@ -55,6 +55,16 @@
                          </a>
                      </li>
                  @endpermission
+                 <li class="dash-item dash-hasmenu">
+                     <a href="{{ Route('language.index') }}" class="dash-link"><span class="dash-micon"><i
+                                 class="ti ti-language"></i></span><span class="dash-mtext">{{ __('Language Manage') }}</span>
+                     </a>
+                 </li>
+                 <li class="dash-item dash-hasmenu">
+                     <a href="{{ Route('language-translation.index') }}" class="dash-link"><span class="dash-micon"><i
+                                 class="ti ti-file-text"></i></span><span class="dash-mtext">{{ __('Language Translation') }}</span>
+                     </a>
+                 </li>
                  @permission('manage-staff')
                      <li class="dash-item dash-hasmenu">
                          <a href="{{ Route('staffAvailability.index') }}" class="dash-link"><span class="dash-micon"><i
